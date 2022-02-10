@@ -1,8 +1,17 @@
 import Head from 'next/head';
 import Image from 'next/image';
 import styles from '../styles/Home.module.css';
+import { homeRepository } from '../stores/home';
+import Error from './error';
+import Loading from './loading';
 
 export default function Home() {
+	const { home, error, isLoading } = homeRepository.useHome();
+
+	console.log(home,"apa");
+	if (isLoading) return <Loading />;
+	if (error) return <Error />;
+
 	return (
 		<div className={styles.container}>
 			<Head>
@@ -43,6 +52,21 @@ export default function Home() {
 						<p>Instantly deploy your Next.js site to a public URL with Vercel.</p>
 					</a>
 				</div>
+
+				<table>
+					{home?.entries?.map((data, index) => {
+						return (
+							<tr key={index}>
+								<td>{data.API}</td>
+								<td>{data.Description}</td>
+								<td>{data.Auth}</td>
+								<td>{data.HTTPS}</td>
+								<td>{data.Cors}</td>
+								<td>{data.Category}</td>
+							</tr>
+						);
+					})}
+				</table>
 			</main>
 
 			<footer className={styles.footer}>
