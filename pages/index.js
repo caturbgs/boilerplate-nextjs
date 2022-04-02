@@ -1,14 +1,14 @@
 import Head from 'next/head';
 import Image from 'next/image';
-import styles from '../styles/Home.module.css';
 import { homeRepository } from '../stores/home';
+import styles from '../styles/Home.module.css';
 import Error from './error';
 import Loading from './loading';
 
 export default function Home() {
 	const { home, error, isLoading } = homeRepository.useHome();
 
-	console.log(home,"apa");
+	console.log(home, 'apa');
 	if (isLoading) return <Loading />;
 	if (error) return <Error />;
 
@@ -21,8 +21,13 @@ export default function Home() {
 			</Head>
 
 			<main className={styles.main}>
-				<h1 className={styles.title}>
-					Welcome to <a href="https://nextjs.org">Next.js!</a>
+				<h1 className="text-6xl leading-3 m-0">
+					Welcome to{' '}
+					<a
+						className="no-underline text-[#0070f3] hover:underline active:underline focus:underline"
+						href="https://nextjs.org">
+						Next.js!
+					</a>
 				</h1>
 
 				<p className={styles.description}>
