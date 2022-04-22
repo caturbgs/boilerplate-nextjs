@@ -1,8 +1,9 @@
 import useSWR from 'swr';
+import { objectToQueryString } from '../helpers/helpers';
 import { fetcher, http } from '../helpers/http';
 
-const useHome = () => {
-	const { data, error } = useSWR('/entries', fetcher);
+const useHome = (params) => {
+	const { data, error } = useSWR(`/entries?${objectToQueryString(params) || ''}`, fetcher);
 
 	return {
 		home: data,

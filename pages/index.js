@@ -1,14 +1,45 @@
+import { debounce } from 'lodash';
 import Head from 'next/head';
 import Image from 'next/image';
+import { useRef, useState } from 'react';
 import { homeRepository } from '../stores/home';
 import styles from '../styles/Home.module.css';
 import Error from './error';
 import Loading from './loading';
 
 export default function Home() {
-	const { home, error, isLoading } = homeRepository.useHome();
+	const [title, setTitle] = useState('');
+	const [description, setDescription] = useState('');
+	const [category, setCategory] = useState('');
+	const titleDisp = useRef('');
+	const descriptionDisp = useRef('');
+	const categoryDisp = useRef('');
+	const { home, error, isLoading } = homeRepository.useHome({
+		title,
+		description,
+		category,
+	});
 
-	console.log(home, 'apa');
+	const handleChange = debounce((value, type) => {
+		console.log({ type, e: value });
+		switch (type) {
+			case 'title':
+				setTitle(value);
+				titleDisp.current = value;
+				break;
+			case 'description':
+				setDescription(value);
+				descriptionDisp.current = value;
+				break;
+			case 'category':
+				setCategory(value);
+				categoryDisp.current = value;
+				break;
+			default:
+				break;
+		}
+	}, 1000);
+
 	if (isLoading) return <Loading />;
 	if (error) return <Error />;
 
@@ -34,41 +65,46 @@ export default function Home() {
 					Get started by editing <code className={styles.code}>pages/index.js</code>
 				</p>
 
-				<div className={styles.grid}>
-					<a href="https://nextjs.org/docs" className={styles.card}>
-						<h2>Documentation &rarr;</h2>
-						<p>Find in-depth information about Next.js features and API.</p>
-					</a>
-
-					<a href="https://nextjs.org/learn" className={styles.card}>
-						<h2>Learn &rarr;</h2>
-						<p>Learn about Next.js in an interactive course with quizzes!</p>
-					</a>
-
-					<a href="https://github.com/vercel/next.js/tree/canary/examples" className={styles.card}>
-						<h2>Examples &rarr;</h2>
-						<p>Discover and deploy boilerplate example Next.js projects.</p>
-					</a>
-
-					<a
-						href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-						className={styles.card}>
-						<h2>Deploy &rarr;</h2>
-						<p>Instantly deploy your Next.js site to a public URL with Vercel.</p>
-					</a>
+				<div className="my-10 flex flex-col">
+					<div className="my-2">
+						<label>Name: </label>
+						<input
+							className="border-1 px-2 py-1 bg-slate-100"
+							onChange={(e) => handleChange(e.target.value, 'title')}
+							value={titleDisp.current}
+						/>
+					</div>
+					<div className="my-2">
+						<label>Description: </label>
+						<input
+							className="border-1 px-2 py-1 bg-slate-100"
+							onChange={(e) => handleChange(e.target.value, 'description')}
+							value={descriptionDisp.current}
+						/>
+					</div>
+					<div className="my-2">
+						<label>Category: </label>
+						<input
+							className="border-1 px-2 py-1 bg-slate-100"
+							onChange={(e) => handleChange(e.target.value, 'category')}
+							value={categoryDisp.current}
+						/>
+					</div>
 				</div>
 
 				<table>
 					{home?.entries?.map((data, index) => {
 						return (
-							<tr key={index}>
-								<td>{data.API}</td>
-								<td>{data.Description}</td>
-								<td>{data.Auth}</td>
-								<td>{data.HTTPS}</td>
-								<td>{data.Cors}</td>
-								<td>{data.Category}</td>
-							</tr>
+							<tbody key={index}>
+								<tr>
+									<td>{data.API}</td>
+									<td>{data.Description}</td>
+									<td>{data.Auth}</td>
+									<td>{data.HTTPS}</td>
+									<td>{data.Cors}</td>
+									<td>{data.Category}</td>
+								</tr>
+							</tbody>
 						);
 					})}
 				</table>
