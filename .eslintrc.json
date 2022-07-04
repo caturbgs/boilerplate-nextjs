@@ -5,9 +5,9 @@
   },
   "extends": [
     "eslint:recommended",
-    "next",
-    "prettier"
-    //    "airbnb/hooks"
+    "airbnb",
+    "prettier",
+    "next"
   ],
   "rules": {
   }
